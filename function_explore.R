@@ -39,19 +39,19 @@ write.csv(denguedat_complete_df,"C:/Users/ruu6/OneDrive - CDC/Dengue/Threshold/d
 
 
 
-data=denguedat_complete_df
-now = as.Date("1986-10-01")
+data= denv00_15#denv2015 #denguedat#denguedat_complete_df
+now = as.Date("2015-12-30")
 units = "1 week"
 onset_date = "onset_week"
 report_date = "report_week"
 
 moving_window=NULL
-max_D=NULL
-cutoff_D=NULL
+max_D=30
+cutoff_D=T
 proportion_reported=1
 quiet=TRUE
 specs=list(
-  dist=c("Poisson","NB"),
+  dist=c("NB"),
   alpha1.mean.prior=0,
   alpha1.prec.prior=0.001,
   alphat.shape.prior=0.001,
@@ -60,7 +60,7 @@ specs=list(
   param_names=NULL,
   conf=0.95,
   dispersion.prior=NULL,
-  nAdapt=1000,
+  nAdapt=10000 #3500, #1000,
   nChains=1,
   nBurnin=1000,
   nThin=1,
@@ -335,7 +335,7 @@ NobBS <- function(data, now, units, onset_date, report_date, moving_window=NULL,
   nowcast.post.samps <- (mymod.dat %>% dplyr::select(select_vars(names(mymod.dat),starts_with(paste("sum.n[",t,sep="")))))[,1]
   
   # nowcast_results <<- UPDATE: do not save to global environment; user will have to do this
-  list(estimates=estimates,estimates.inflated=estimates.inflated, nowcast.post.samps=nowcast.post.samps,params.post=parameter_extract[,2:ncol(parameter_extract)])
+denv_nowcast <-   list(estimates=estimates,estimates.inflated=estimates.inflated, nowcast.post.samps=nowcast.post.samps,params.post=parameter_extract[,2:ncol(parameter_extract)])
   
 }
 
