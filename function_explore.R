@@ -7,13 +7,13 @@ library(lubridate)
 library(stringr)
 library(tidyverse)
 
-denguedat <- read_excel("//cdc.gov/locker/OID_DB_EPI_PII/Datasets/Projects/Dengue Threshold/case_linelist_by_week_1986-2021.xlsx")
+denguedat <- read_excel("//cdc.gov/locker/OID_DB_EPI_PII/Datasets/Projects/Dengue Threshold/_archive/case_linelist_by_week_1986-2021_new.xlsx")
 head(denguedat)
 
 denguedat$ODATE <- as.Date(as.character(denguedat$ODATE))
-denguedat$CASE_FIRST_CDATE <- as.Date(as.character(denguedat$CASE_FIRST_CDATE))
+denguedat$CASE_DATECREATED <- as.Date(as.character(denguedat$CASE_DATECREATED))
 
-denguedat_complete <- denguedat[,c("ODATE","CASE_FIRST_CDATE")]
+denguedat_complete <- denguedat[,c("ODATE","CASE_DATECREATED")]
 denguedat_complete <- denguedat_complete[complete.cases(denguedat_complete),]
 
 any( !is.finite( denguedat_complete$ODATE ) )
@@ -30,12 +30,12 @@ denguedat_complete_df$onset_week <- as.Date(NA)
 denguedat_complete_df$report_week <- as.Date(NA)
 for (i in 1:nrow(denguedat_complete_df)){
   denguedat_complete_df$onset_week[i] <- as.Date(paste(year(denguedat_complete_df$ODATE[i]), str_pad(isoweek(denguedat_complete_df$ODATE[i]),2,pad="0"),1,sep="-"), "%Y-%U-%u")-5
-  denguedat_complete_df$report_week[i] <- as.Date(paste(year(denguedat_complete_df$CASE_FIRST_CDATE[i]), str_pad(isoweek(denguedat_complete_df$CASE_FIRST_CDATE[i]),2,pad="0"),1,sep="-"), "%Y-%U-%u")-5
+  denguedat_complete_df$report_week[i] <- as.Date(paste(year(denguedat_complete_df$CASE_DATECREATED[i]), str_pad(isoweek(denguedat_complete_df$CASE_DATECREATED[i]),2,pad="0"),1,sep="-"), "%Y-%U-%u")-5
   print(i)}
 
 denguedat_complete_df <- denguedat_complete_df[complete.cases(denguedat_complete_df),]
 
-write.csv(denguedat_complete_df,"C:/Users/ruu6/OneDrive - CDC/Dengue/Threshold/denguedat_line_week.csv")
+write.csv(denguedat_complete_df,"C:/Users/ruu6/OneDrive - CDC/Dengue/Threshold/denguedat_line_week.2.18.21.csv")
 
 
 
